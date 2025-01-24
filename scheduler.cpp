@@ -87,10 +87,10 @@ int main() {
         slots.push_back(pair.second);
     }
 
-    vector<tuple<char,char,char>> slotsWithNames;
+    vector<tuple<char,string,string>> slotsWithNames;
 
     for (int i = 0; i < allSlots.size(); i++) {
-        slotsWithNames.push_back({allSlots[i], '\0', '\0'});
+        slotsWithNames.push_back({allSlots[i], "", ""});
     }
 
     // DONE WITH SORTING **************************************************************************
