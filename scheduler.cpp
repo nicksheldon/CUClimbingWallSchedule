@@ -4,8 +4,17 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <random>
 
 using namespace std;
+
+int getRandomIndex(int size) {
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> distrib(0, size - 1);
+    return {distrib(gen)};
+
+}
 
 int main() {
     // Vectors to hold the data
@@ -87,10 +96,10 @@ int main() {
         slots.push_back(pair.second);
     }
 
-    vector<tuple<char,string,string>> slotsWithNames;
+    vector<pair<char,vector<string>>> slotsWithNames;
 
     for (int i = 0; i < allSlots.size(); i++) {
-        slotsWithNames.push_back({allSlots[i], "", ""});
+        slotsWithNames.push_back({allSlots[i], {"", ""}});
     }
 
     // DONE WITH SORTING **************************************************************************
@@ -99,6 +108,21 @@ int main() {
         cout << names[i] << ": ";
         for (int j = 0; j < slots[i].size(); j++) {
             cout << slots[i][j] << ", ";
+        }
+        cout << endl;
+    }
+
+    // GENETIC STARTING:
+
+    for (int i = 0; i < slotsWithNames.size(); i++) {
+        slotsWithNames[i].second[0] = names[getRandomIndex(slotsWithNames.size())];
+        slotsWithNames[i].second[1] = names[getRandomIndex(slotsWithNames.size())];
+    }
+
+    for (int i = 0; i < slotsWithNames.size(); i++) {
+        cout << slotsWithNames[i].first << ": ";
+        for (int j = 0; j < slotsWithNames[i].second.size(); j++) {
+            cout << slotsWithNames[i].second[j] << " ";
         }
         cout << endl;
     }
