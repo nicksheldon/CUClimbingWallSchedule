@@ -1,6 +1,7 @@
 from z3 import *
 import csv
 import os
+import shutil
 
 def run_schedule(run_number, staff_availability, shift_letters, days, x):
     # Create new optimizer and add constraints.
@@ -109,7 +110,11 @@ def clear_solutions(folder):
     print("All files in the solutions folder have been deleted.")
 
 def main():
-    clear_solutions("solutions")
+    # Ensure the solutions folder exists and is empty
+    solutions_folder = "solutions"
+    if os.path.exists(solutions_folder):
+        shutil.rmtree(solutions_folder)  # Remove the folder and its contents
+    os.makedirs(solutions_folder)  # Create a fresh, empty folder
 
     # Build a dictionary {staff: set(allowed_shifts)}
     staff_availability = {}
@@ -181,8 +186,14 @@ def main():
             clear_solutions("solutions")
             print("Solutions folder has been cleared.")
             break
+        elif user_input == "help":
+            print("Ask nick, and try again")
         else:
             print("Wrong key. Just press 'Enter' :/")
 
 if __name__ == "__main__":
     main()
+
+    # After exiting the while loop, create the "whats_left.txt" file
+    with open(os.path.join("solutions", "whats_left.txt"), "w") as file:
+        file.write("wrong way")
