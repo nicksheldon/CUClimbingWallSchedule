@@ -61,7 +61,56 @@ def check_duplicate_solutions():
         else:
             seen[content] = f
 
+def find_common_lines(folder):
+    # Get all CSV files in the folder
+    files = [f for f in os.listdir(folder) if f.endswith(".csv")]
+    if not files:
+        print("No CSV files found in the folder.")
+        return
+
+    # Initialize a set to store common lines
+    common_lines = None
+
+    # Process each file
+    for file in files:
+        file_path = os.path.join(folder, file)
+        with open(file_path, 'r') as csvfile:
+            reader = csv.reader(csvfile)
+            # Skip the header row
+            next(reader, None)
+            # Read all lines in the current file
+            lines = set(tuple(row) for row in reader)
+            # Intersect with the common lines set
+            if common_lines is None:
+                common_lines = lines
+            else:
+                common_lines &= lines
+
+    # Print the common lines
+    if common_lines:
+        for line in common_lines:
+            print(",".join(line))
+    else:
+        print("No common lines found across all files.")
+
+def clear_solutions(folder):
+    # Get all files in the folder
+    files = [f for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
+    if not files:
+        print("No files found in the folder.")
+        return
+
+    # Delete each file
+    for file in files:
+        file_path = os.path.join(folder, file)
+        os.remove(file_path)
+        print(f"Deleted: {file_path}")
+
+    print("All files in the solutions folder have been deleted.")
+
 def main():
+    clear_solutions("solutions")
+
     # Build a dictionary {staff: set(allowed_shifts)}
     staff_availability = {}
     with open('responses.csv', 'r') as csvfile:
@@ -98,7 +147,8 @@ def main():
     os.makedirs("solutions", exist_ok=True)
 
     # Run the schedule 10 times and store each result.
-    for i in range(100):
+    print("Searching:")
+    for i in range(10):
         result = run_schedule(i, staff_availability, shift_letters, days, x)
         filename = os.path.join("solutions", f"solution_{i+1}.csv")
         with open(filename, 'w', newline='') as csvfile:
@@ -118,5 +168,21 @@ def main():
     # After generating the files, remove duplicate csvs.
     check_duplicate_solutions()
 
-if __name__ == '__main__':
+    print("********************************************")
+    print("The following assignments are mandatory:")
+    find_common_lines("solutions")
+    print("********************************************")
+    print("Now clean up your mess")
+    print("Save your solutions and press 'enter' to reset:")
+    # Wait for Enter key press to call the cleanup function
+    while True:
+        user_input = input()
+        if user_input == "":
+            clear_solutions("solutions")
+            print("Solutions folder has been cleared.")
+            break
+        else:
+            print("Wrong key. Just press 'Enter' :/")
+
+if __name__ == "__main__":
     main()
