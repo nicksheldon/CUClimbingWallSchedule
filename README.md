@@ -1,4 +1,6 @@
 # CUClimbingWallSchedule
+Instructions for wall directors:
+
 - Install python
 - Install z3 python API
 
