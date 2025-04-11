@@ -110,6 +110,7 @@ def clear_solutions(folder):
     print("All files in the solutions folder have been deleted.")
 
 def main():
+    print("Help will always be given at Hogwarts to those who ask for it.")
     # Ensure the solutions folder exists and is empty
     solutions_folder = "solutions"
     if os.path.exists(solutions_folder):
@@ -187,7 +188,7 @@ def main():
             print("Solutions folder has been cleared.")
             break
         elif user_input == "help":
-            print("Ask nick, and try again")
+            print("This isn't Hogwarts.")
         else:
             print("Wrong key. Just press 'Enter' :/")
 
